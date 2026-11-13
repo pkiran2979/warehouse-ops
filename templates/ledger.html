@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Ledger - Warehouse Ops{% endblock %}{% block body %}
+<div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><h3>Stock ledger</h3><a class="btn btn-outline-success btn-sm" href="/ledger?fmt=xlsx&type={{t}}&sku={{sku}}">Download this view (Excel)</a></div>
+<form class="row g-2 mb-3"><div class="col-sm-4 col-md-3"><select name="type" class="form-select" aria-label="Type"><option value="">All movement types</option>{% for x in ["GRN","ISSUE","COUNT","OPENING"] %}<option {{'selected' if t==x}}>{{x}}</option>{% endfor %}</select></div>
+<div class="col-sm-5 col-md-3"><input name="sku" value="{{sku}}" class="form-control" placeholder="SKU contains..." aria-label="SKU"></div><div class="col-auto"><button class="btn btn-secondary">Filter</button> <a class="btn btn-link" href="/ledger">Clear</a></div></form>
+<div class="hint mb-1">Showing the latest 200 movements. The ledger is append-only: corrections are made with a cycle count, never by editing.</div>
+<div class="table-wrap"><table class="table table-sm table-striped bg-white"><thead><tr><th>Date</th><th>SKU</th><th>Material</th><th>Bin</th><th>Type</th><th class="text-end">Qty</th><th>Ref</th><th>Note</th><th>User</th></tr></thead><tbody>
+{% for r in rows %}<tr><td>{{r.ts.strftime('%Y-%m-%d %H:%M')}}</td><td>{{r.material.sku}}</td><td>{{r.material.name}}</td><td>{{r.bin.code}}</td><td><span class="badge text-bg-{{ {'GRN':'success','ISSUE':'danger','COUNT':'warning','OPENING':'secondary'}[r.mtype] }}">{{r.mtype}}</span></td><td class="text-end">{{"%+g"|format(r.qty)}}</td><td>{{r.ref or ''}}</td><td>{{r.note or ''}}</td><td>{{r.user or ''}}</td></tr>
+{% else %}<tr><td colspan="9" class="text-muted">No movements match.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

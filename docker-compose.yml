@@ -1,0 +1,8 @@
+services:
+  warehouse:
+    build: .
+    ports: ["5001:5001"]
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in your shell or in a local .env file}
+      DATABASE_URL: sqlite:////data/warehouse.db
+    volumes: ["./data:/data", "./uploads:/app/uploads", "./rag_data:/app/rag_data"]

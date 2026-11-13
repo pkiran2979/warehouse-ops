@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Import - Warehouse Ops{% endblock %}{% block body %}
+<h3>Import from Excel</h3>
+<ol class="text-muted"><li>Download the template and fill it in.</li><li>Sheet <b>Materials</b>: sku, name, category, unit, min_stock, shelf_life_days, storage_rule. Existing SKUs are updated.</li><li>Sheet <b>OpeningStock</b> (optional): sku, bin, qty.</li><li>Upload the file (.xlsx, up to 25 MB).</li></ol>
+<form method="post" enctype="multipart/form-data" class="card card-body form-card form-narrow"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<input type="file" name="file" accept=".xlsx,.xls" class="form-control mb-3" required aria-label="Excel file"><div class="d-flex gap-2"><button class="btn btn-primary">Upload and import</button><a class="btn btn-outline-secondary" href="/export/template.xlsx">Download template</a></div></form>
+{% endblock %}

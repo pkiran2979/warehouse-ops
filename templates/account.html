@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}My account - Warehouse Ops{% endblock %}{% block body %}
+<h3>My account</h3><p class="text-muted">Signed in as <b>{{me.username}}</b> ({{me.role}}).{% if me.must_change %} <b class="text-danger">Please choose a new password to continue.</b>{% endif %}</p>
+<form method="post" class="card card-body form-sm"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<label class="form-label req" for="c">Current password</label><input id="c" name="current" type="password" class="form-control mb-2" autocomplete="current-password" required>
+<label class="form-label req" for="nw">New password</label><div class="input-group"><input id="nw" name="new" type="password" class="form-control" autocomplete="new-password" data-strength="#st" required><button type="button" class="btn btn-outline-secondary" data-toggle-pw="#nw">Show</button></div>
+<div id="st" class="hint mb-2">8+ characters with letters and numbers.</div>
+<label class="form-label req" for="cf">Confirm new password</label><input id="cf" name="confirm" type="password" class="form-control mb-3" autocomplete="new-password" required><div><button class="btn btn-primary">Change password</button></div></form>
+{% endblock %}

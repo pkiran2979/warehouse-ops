@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block body %}<div class="card card-body text-center mx-auto form-narrow"><h3>{{ "Not allowed" if code==403 else "Something went wrong" }}</h3><p class="text-muted">{{msg}}</p>
+<div><a class="btn btn-dark" href="/">Back to dashboard</a></div></div>{% endblock %}

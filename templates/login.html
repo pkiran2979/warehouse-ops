@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in - Warehouse Ops</title>
+<link href="/static/bootstrap.min.css" rel="stylesheet"><link href="/static/app.css" rel="stylesheet"></head><body>
+<div class="login-wrap"><section class="login-hero"><div class="brand-mark mb-3">W</div><h1>Warehouse Ops</h1><p class="fs-5 mb-4">Construction materials warehouse management</p>
+<ul class="list-unstyled"><li>&#10003; Receive and put away stock with smart bin suggestions</li><li>&#10003; Issue to site with an auditable stock ledger</li><li>&#10003; Cycle counts, Excel import/export and SOP search</li><li>&#10003; Role-based access for every team member</li></ul></section>
+<main class="login-panel"><div class="login-box"><h4 class="fw-bold mb-1">Welcome back</h4><p class="text-muted mb-3">Sign in to continue</p>
+{% with msgs = get_flashed_messages(with_categories=true) %}{% for c, m in msgs %}<div class="alert alert-{{c}}" role="alert">{{m}}</div>{% endfor %}{% endwith %}
+<form method="post" autocomplete="on"><label class="form-label req" for="u">Username</label><input id="u" name="username" class="form-control form-control-lg mb-3" autocomplete="username" autofocus required>
+<label class="form-label req" for="p">Password</label><div class="input-group input-group-lg mb-3"><input id="p" name="password" type="password" class="form-control" autocomplete="current-password" required><button type="button" class="btn btn-outline-secondary" data-toggle-pw="#p">Show</button></div>
+<button class="btn btn-primary btn-lg w-100">Sign in</button><div class="hint mt-3">Forgot your password? Ask an admin to reset it.</div></form></div></main></div>
+<script src="/static/app.js"></script></body></html>

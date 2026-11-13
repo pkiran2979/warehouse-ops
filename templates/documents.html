@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Documents - Warehouse Ops{% endblock %}{% block body %}
+<h3>Documents and knowledge search</h3><p class="text-muted">Upload SOPs, storage guidelines and material data sheets, then ask a question. Search method: {{backend}}.</p>
+<form class="input-group mb-3"><input name="q" value="{{q}}" class="form-control" placeholder="Try: how should cement be stored?" aria-label="Search documents"><button class="btn btn-dark">Search</button></form>
+{% for r in results %}<div class="card mb-2"><div class="card-body"><div class="small text-muted mb-1">{{r.filename}} ({{r.doc_type}})</div>{{r.text}}</div></div>{% endfor %}
+{% if q and not results %}<div class="alert alert-secondary">No matching passages. Try different words, or upload a relevant document.</div>{% endif %}
+{% if can_write %}<form method="post" enctype="multipart/form-data" class="card card-body my-4"><input type="hidden" name="csrf_token" value="{{csrf_token}}"><div class="row g-2 align-items-end">
+<div class="col-md-5"><label class="form-label req">File (PDF, DOCX, TXT, MD, XLSX, CSV)</label><input type="file" name="file" class="form-control" required></div>
+<div class="col-md-4"><label class="form-label">Type</label><select name="doc_type" class="form-select"><option>SOP</option><option>Data sheet</option><option>HSE policy</option><option>Other</option></select></div>
+<div class="col-md-3"><button class="btn btn-primary w-100">Upload</button></div></div></form>{% endif %}
+<div class="table-wrap"><table class="table table-sm bg-white mt-3"><thead><tr><th>File</th><th>Type</th><th>Passages</th><th>Uploaded</th><th></th></tr></thead><tbody>
+{% for d in docs %}<tr><td>{{d.filename}}</td><td>{{d.doc_type}}</td><td>{{d.chunks}}</td><td>{{d.uploaded_at.strftime('%d %b %Y')}}</td><td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-success" href="/documents/{{d.id}}/download">Download</a>
+{% if me.role == "admin" %}<form method="post" action="/documents/{{d.id}}/delete" class="d-inline" data-confirm="Delete {{d.filename}}? This cannot be undone."><input type="hidden" name="csrf_token" value="{{csrf_token}}"><button class="btn btn-sm btn-outline-danger">Delete</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="text-muted">No documents yet.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

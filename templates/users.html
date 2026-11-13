@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Users - Warehouse Ops{% endblock %}{% block body %}
+<h3>User management</h3><p class="text-muted">New and reset users must choose their own password the first time they sign in.</p>
+<details class="card card-body mb-3" open><summary class="fw-semibold">Add a user</summary>
+<form method="post" action="/users/create" class="row g-2 mt-1" autocomplete="off"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<div class="col-md-3"><label class="form-label req">Username</label><input name="username" class="form-control" maxlength="40" required><div class="hint">Letters, numbers, dot, underscore</div></div>
+<div class="col-md-3"><label class="form-label">Full name</label><input name="full_name" class="form-control" maxlength="120"></div>
+<div class="col-md-3"><label class="form-label">Role</label><select name="role" class="form-select">{% for k, v in roles.items() %}<option value="{{k}}">{{v}}</option>{% endfor %}</select></div>
+<div class="col-md-3"><label class="form-label req">Temporary password</label><input name="password" type="password" class="form-control" autocomplete="new-password" required></div>
+<div class="col-12"><button class="btn btn-primary">Create user</button></div></form></details>
+<div class="table-wrap"><table class="table table-sm bg-white align-middle"><thead><tr><th>User</th><th>Role and status</th><th>Last sign-in</th><th>Reset password</th></tr></thead><tbody>
+{% for u in users %}<tr><td><b>{{u.username}}</b><div class="hint">{{u.full_name or ''}}{% if u.must_change %} (must change password){% endif %}</div></td>
+<td><form method="post" action="/users/{{u.id}}/update" class="d-flex gap-1"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<select name="role" class="form-select form-select-sm" aria-label="Role">{% for k in roles %}<option {{'selected' if u.role==k}}>{{k}}</option>{% endfor %}</select>
+<select name="active" class="form-select form-select-sm" aria-label="Status"><option value="1" {{'selected' if u.active}}>Active</option><option value="0" {{'selected' if not u.active}}>Disabled</option></select><button class="btn btn-sm btn-outline-primary">Save</button></form></td>
+<td>{{u.last_login.strftime('%d %b %Y %H:%M') if u.last_login else 'Never'}}</td>
+<td><form method="post" action="/users/{{u.id}}/reset" class="d-flex gap-1" data-confirm="Reset the password for {{u.username}}?"><input type="hidden" name="csrf_token" value="{{csrf_token}}"><input name="password" type="password" class="form-control form-control-sm" placeholder="New temporary password" autocomplete="new-password" required><button class="btn btn-sm btn-outline-secondary">Reset</button></form></td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

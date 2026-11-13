@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Receive - Warehouse Ops{% endblock %}{% block body %}
+<h3>Receive stock (GRN)</h3><p class="text-muted">Book a delivery into the warehouse. The best storage bin is suggested for you.</p>
+<form method="post" class="card card-body form-card form-narrow mb-4"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<label class="form-label req" for="mat">Material</label>
+<input class="form-control form-control-sm mb-1" placeholder="Type to narrow the list..." data-select-filter="#mat" aria-label="Filter materials">
+<select name="material_id" id="mat" class="form-select mb-2">{% for m in mats %}<option value="{{m.id}}" {{'selected' if selected==m.id}} data-bin="{{sugg[m.id]}}" data-note="{{zone_notes[m.zone]}}" data-shelf="{{m.shelf_life_days or ''}}">{{m.sku}} - {{m.name}}</option>{% endfor %}</select>
+<div class="alert alert-info py-2" id="hint"></div>
+<div class="row g-2 mb-2"><div class="col-sm-6"><label class="form-label req" for="q">Quantity</label><input id="q" name="qty" type="number" step="any" min="0.001" class="form-control" required></div>
+<div class="col-sm-6"><label class="form-label" for="b">Storage bin</label><select id="b" name="bin_id" class="form-select"><option value="">Use suggested bin</option>{% for b in bins %}<option value="{{b.id}}">{{b.code}} ({{b.zone}})</option>{% endfor %}</select></div></div>
+<div class="row g-2 mb-2"><div class="col-sm-6"><label class="form-label" for="r">PO / delivery note</label><input id="r" name="ref" class="form-control" maxlength="60"></div>
+<div class="col-sm-6"><label class="form-label" for="e">Expiry date</label><input id="e" name="expiry" type="date" class="form-control"><div class="hint">Leave blank to use the material's shelf life.</div></div></div>
+<label class="form-label" for="n">Note</label><input id="n" name="note" class="form-control mb-3" placeholder="Damage, shortage, remarks" maxlength="255"><div><button class="btn btn-primary">Post receipt</button></div></form>
+<h6>Your last receipts</h6><div class="table-wrap"><table class="table table-sm bg-white form-narrow"><tbody>{% for r in mine %}<tr><td>{{r.ts.strftime('%d %b %H:%M')}}</td><td>{{r.material.name}}</td><td>{{r.bin.code}}</td><td class="text-end">{{"%+g"|format(r.qty)}}</td></tr>{% else %}<tr><td class="text-muted">Nothing yet.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

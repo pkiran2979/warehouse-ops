@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Cycle count - Warehouse Ops{% endblock %}{% block body %}
+<h3>Cycle count</h3><p class="text-muted">Count what is physically in the bin and enter it. Any difference is recorded in the ledger as an adjustment with your name.</p>
+<form method="post" class="card card-body form-card form-narrow"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<label class="form-label req" for="cm">Material</label><input class="form-control form-control-sm mb-1" placeholder="Type to narrow the list..." data-select-filter="#cm" aria-label="Filter materials">
+<select name="material_id" id="cm" class="form-select mb-2">{% for m in mats %}<option value="{{m.id}}">{{m.sku}} - {{m.name}}</option>{% endfor %}</select>
+<label class="form-label req" for="cb">Bin</label><select name="bin_id" id="cb" class="form-select mb-1">{% for b in bins %}<option value="{{b.id}}">{{b.code}}</option>{% endfor %}</select>
+<div class="alert alert-info py-2" id="sys">Choose a material and bin to see the system quantity.</div>
+<label class="form-label req" for="ct">Counted quantity</label><input id="ct" name="counted" type="number" step="any" min="0" class="form-control mb-2" required>
+<label class="form-label" for="cn">Reason for any difference</label><input id="cn" name="note" class="form-control mb-3" maxlength="255"><div><button class="btn btn-primary">Record count</button></div></form>
+{% endblock %}

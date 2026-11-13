@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Issue - Warehouse Ops{% endblock %}{% block body %}
+<h3>Issue to site</h3><p class="text-muted">Take stock out of a bin for a site or project. You cannot issue more than the bin holds.</p>
+{% if avail %}<form method="post" class="card card-body form-card form-narrow mb-4"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<label class="form-label req" for="bs">Material and bin</label>
+<input class="form-control form-control-sm mb-1" placeholder="Type to narrow the list..." data-select-filter="#bs" aria-label="Filter">
+<select name="bin_id" id="bs" class="form-select mb-1">{% for a in avail %}<option value="{{a.b.id}}" data-m="{{a.m.id}}" data-q="{{'%g'|format(a.q)}}" data-u="{{a.m.unit}}">{{a.m.sku}} {{a.m.name}} @ {{a.b.code}} ({{"%g"|format(a.q)}} {{a.m.unit}})</option>{% endfor %}</select>
+<div class="hint mb-2" id="avail"></div><input type="hidden" name="material_id" id="mid" value="{{avail[0].m.id}}">
+<label class="form-label req" for="qty">Quantity</label><input id="qty" name="qty" type="number" step="any" min="0.001" class="form-control mb-2" required>
+<label class="form-label" for="ref">Site / project / request</label><input id="ref" name="ref" class="form-control mb-2" maxlength="60">
+<label class="form-label" for="note">Note</label><input id="note" name="note" class="form-control mb-3" maxlength="255"><div><button class="btn btn-primary">Post issue</button></div></form>
+{% else %}<div class="alert alert-secondary">There is no stock to issue yet. Receive some first.</div>{% endif %}
+<h6>Your last issues</h6><div class="table-wrap"><table class="table table-sm bg-white form-narrow"><tbody>{% for r in mine %}<tr><td>{{r.ts.strftime('%d %b %H:%M')}}</td><td>{{r.material.name}}</td><td>{{r.bin.code}}</td><td class="text-end">{{"%+g"|format(r.qty)}}</td></tr>{% else %}<tr><td class="text-muted">Nothing yet.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

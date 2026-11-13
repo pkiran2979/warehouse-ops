@@ -1,0 +1,8 @@
+{% macro icon(n) -%}
+<svg viewBox="0 0 24 24" aria-hidden="true">
+{%- if n=='box' %}<path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/>
+{%- elif n=='grid' %}<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+{%- elif n=='in' %}<path d="M12 3v12M7 10l5 5 5-5M4 20h16"/>
+{%- elif n=='out' %}<path d="M12 15V3M7 8l5-5 5 5M4 20h16"/>
+{%- elif n=='alert' %}<path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18h.01"/>{%- endif %}</svg>
+{%- endmacro %}

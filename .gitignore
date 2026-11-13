@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Secrets and local config (never commit)
+.env
+*.env
+!.env.example
+
+# Local data created at runtime
+*.db
+*.sqlite3
+data/
+rag_data/
+uploads/*
+!uploads/.gitkeep
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Docker / misc
+*.log
+*.zip

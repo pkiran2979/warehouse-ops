@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Materials - Warehouse Ops{% endblock %}{% block body %}
+<div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><h3>Material master</h3><a class="btn btn-outline-success btn-sm" href="/export/stock.xlsx">Download stock (Excel)</a></div>
+{% if can_write %}<details class="card card-body mb-3"><summary class="fw-semibold">Add a material</summary>
+<form method="post" class="row g-2 mt-1"><input type="hidden" name="csrf_token" value="{{csrf_token}}">
+<div class="col-md-3"><label class="form-label req">SKU</label><input name="sku" class="form-control" maxlength="40" required></div>
+<div class="col-md-5"><label class="form-label req">Name</label><input name="name" class="form-control" maxlength="160" required></div>
+<div class="col-md-4"><label class="form-label">Category</label><select name="category" class="form-select">{% for c in cats %}<option>{{c}}</option>{% endfor %}</select></div>
+<div class="col-md-2"><label class="form-label">Unit</label><input name="unit" class="form-control" value="pcs"></div>
+<div class="col-md-3"><label class="form-label">Minimum stock</label><input name="min_stock" type="number" step="any" min="0" class="form-control"></div>
+<div class="col-md-3"><label class="form-label">Shelf life (days)</label><input name="shelf_life_days" type="number" min="1" class="form-control"></div>
+<div class="col-md-4"><label class="form-label">Storage note</label><input name="storage_rule" class="form-control" maxlength="255"></div>
+<div class="col-12"><button class="btn btn-primary">Add material</button><span class="hint ms-2">The storage zone is chosen automatically from the category.</span></div></form></details>{% endif %}
+<input class="form-control mb-2" placeholder="Search by SKU, name or category..." data-filter="#mt" aria-label="Search materials">
+<div class="table-wrap"><table class="table table-sm table-striped bg-white" id="mt"><thead><tr><th>SKU</th><th>Name</th><th>Category</th><th>Zone</th><th class="text-end">On hand</th><th class="text-end">Min</th><th>Status</th></tr></thead><tbody>
+{% for m in mats %}{% set q = stock.get(m.id, 0) or 0 %}<tr><td>{{m.sku}}</td><td>{{m.name}}</td><td>{{m.category}}</td><td>{{m.zone}}</td><td class="text-end">{{"%g"|format(q)}} {{m.unit}}</td><td class="text-end">{{"%g"|format(m.min_stock)}}</td>
+<td>{% if q < m.min_stock %}<span class="badge text-bg-warning">Low</span>{% else %}<span class="badge text-bg-success">OK</span>{% endif %}</td></tr>
+{% else %}<tr><td colspan="7" class="text-muted">No materials yet. Add one above or use Import.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}
